@@ -1,0 +1,32 @@
+version: '3.8'
+services:
+  frontend:
+    build:
+      context: 'frontend'
+      dockerfile: 'Dockerfile.dev'
+    container_name: 'frontend'
+    depends_on:
+      - backend
+    volumes:
+      - './frontend:/app'
+      - '/app/node_modules/'
+      - '/app/.next/'
+      - './.git:/app/.git'
+    ports:
+      - 3000:3000
+    tty: true
+    stdin_open: false
+
+  backend:
+    build:
+      context: 'backend'
+      dockerfile: 'Dockerfile.dev'
+    container_name: 'backend'
+    volumes:
+      - './backend:/app'
+      - '/app/node_modules/'
+      - './.git:/app/.git'
+    ports:
+      - 4000:4000
+    tty: true
+    stdin_open: false
