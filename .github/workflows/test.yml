@@ -33,6 +33,7 @@ jobs:
           npm test
 
   deploy:
+    needs: [test]
     name: Deploy
     runs-on: ubuntu-latest
 
@@ -62,6 +63,7 @@ jobs:
           # push it to ECR so that it can
           # be deployed to ECS.
           cd ./backend
+          echo $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
