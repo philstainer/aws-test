@@ -1,5 +1,5 @@
-resource "aws_alb" "ecs-load-balancer" {
-  name               = "ecs-load-balancer"
+resource "aws_alb" "backend" {
+  name               = "backend"
   load_balancer_type = "application"
   subnets = [
     aws_subnet.public_a.id,
@@ -9,12 +9,12 @@ resource "aws_alb" "ecs-load-balancer" {
   security_groups = [aws_security_group.load_balancer_security_group.id]
 
   tags = {
-    Name = "ecs-load-balancer"
+    Name = "backend"
   }
 }
 
-resource "aws_alb_target_group" "ecs-target-group" {
-  name        = "ecs-target-group"
+resource "aws_alb_target_group" "backend" {
+  name        = "backend"
   port        = "80"
   protocol    = "HTTP"
   target_type = "ip"
@@ -32,17 +32,17 @@ resource "aws_alb_target_group" "ecs-target-group" {
   }
 
   tags = {
-    Name = "ecs-target-group"
+    Name = "backend"
   }
 }
 
-resource "aws_alb_listener" "alb-listener" {
-  load_balancer_arn = aws_alb.ecs-load-balancer.arn
+resource "aws_alb_listener" "backend" {
+  load_balancer_arn = aws_alb.backend.arn
   port              = "80"
   protocol          = "HTTP"
 
   default_action {
     type             = "forward"
-    target_group_arn = aws_alb_target_group.ecs-target-group.arn
+    target_group_arn = aws_alb_target_group.backend.arn
   }
 }

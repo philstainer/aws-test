@@ -1,7 +1,7 @@
 resource "aws_ecs_service" "backend" {
   name            = "backend"
   cluster         = aws_ecs_cluster.main.id
-  task_definition = aws_ecs_task_definition.backend_api.arn
+  task_definition = aws_ecs_task_definition.backend.arn
   launch_type     = "FARGATE"
 
   desired_count                      = var.desired_count
@@ -9,8 +9,8 @@ resource "aws_ecs_service" "backend" {
   deployment_maximum_percent         = var.deployment_max_percent
 
   load_balancer {
-    target_group_arn = aws_alb_target_group.ecs-target-group.arn
-    container_name   = aws_ecs_task_definition.backend_api.family
+    target_group_arn = aws_alb_target_group.backend.arn
+    container_name   = aws_ecs_task_definition.backend.family
     container_port   = 4000 # Specify the container port
   }
 
@@ -25,7 +25,7 @@ resource "aws_ecs_service" "backend" {
   }
 
   depends_on = [
-    aws_alb_listener.alb-listener
+    aws_alb_listener.backend
   ]
 
   lifecycle {

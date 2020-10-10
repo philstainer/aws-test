@@ -1,4 +1,4 @@
-resource "aws_appautoscaling_target" "ecs_target" {
+resource "aws_appautoscaling_target" "backend" {
   service_namespace  = "ecs"
   resource_id        = "service/${aws_ecs_cluster.main.name}/${aws_ecs_service.backend.name}"
   scalable_dimension = "ecs:service:DesiredCount"
@@ -13,9 +13,9 @@ resource "aws_appautoscaling_target" "ecs_target" {
 resource "aws_appautoscaling_policy" "up" {
   name               = "scale-up"
   policy_type        = "StepScaling"
-  resource_id        = aws_appautoscaling_target.ecs_target.resource_id
-  scalable_dimension = aws_appautoscaling_target.ecs_target.scalable_dimension
-  service_namespace  = aws_appautoscaling_target.ecs_target.service_namespace
+  resource_id        = aws_appautoscaling_target.backend.resource_id
+  scalable_dimension = aws_appautoscaling_target.backend.scalable_dimension
+  service_namespace  = aws_appautoscaling_target.backend.service_namespace
 
   step_scaling_policy_configuration {
     adjustment_type         = "ChangeInCapacity"
@@ -29,16 +29,16 @@ resource "aws_appautoscaling_policy" "up" {
   }
 
   depends_on = [
-    aws_appautoscaling_target.ecs_target,
+    aws_appautoscaling_target.backend,
   ]
 }
 
 resource "aws_appautoscaling_policy" "down" {
   name               = "scale-down"
   policy_type        = "StepScaling"
-  resource_id        = aws_appautoscaling_target.ecs_target.resource_id
-  scalable_dimension = aws_appautoscaling_target.ecs_target.scalable_dimension
-  service_namespace  = aws_appautoscaling_target.ecs_target.service_namespace
+  resource_id        = aws_appautoscaling_target.backend.resource_id
+  scalable_dimension = aws_appautoscaling_target.backend.scalable_dimension
+  service_namespace  = aws_appautoscaling_target.backend.service_namespace
 
   step_scaling_policy_configuration {
     adjustment_type         = "ChangeInCapacity"
@@ -52,7 +52,7 @@ resource "aws_appautoscaling_policy" "down" {
   }
 
   depends_on = [
-    aws_appautoscaling_target.ecs_target,
+    aws_appautoscaling_target.backend,
   ]
 }
 

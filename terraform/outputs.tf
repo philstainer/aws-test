@@ -3,7 +3,7 @@ output "ecs_backend_name" {
 }
 
 output "lb_backend_dns" {
-  value = aws_alb.ecs-load-balancer.dns_name
+  value = aws_alb.backend.dns_name
 }
 
 output "ecr_backend_uri" {
@@ -11,5 +11,5 @@ output "ecr_backend_uri" {
 }
 
 output "backend_task_definition_arn" {
-  value = aws_ecs_task_definition.backend_api.arn
+  value = aws_ecs_task_definition.backend.arn
 }

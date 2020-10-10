@@ -1,9 +1,4 @@
-# data "aws_ecs_task_definition" "nginx" {
-#   task_definition = aws_ecs_task_definition.backend_api.family
-#   depends_on      = [aws_ecs_task_definition.backend_api]
-# }
-
-resource "aws_ecs_task_definition" "backend_api" {
+resource "aws_ecs_task_definition" "backend" {
   family = "backend"
 
   requires_compatibilities = ["FARGATE"]
@@ -25,7 +20,15 @@ resource "aws_ecs_task_definition" "backend_api" {
           "containerPort": 4000,
           "hostPort": 4000
         }
-      ]
+      ],
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "/fargate/service/backend",
+          "awslogs-region": "${var.aws_region}",
+          "awslogs-stream-prefix": "ecs"
+        }
+      }
     }
   ]
   DEFINITION
