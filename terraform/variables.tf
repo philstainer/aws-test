@@ -14,18 +14,6 @@ variable "aws_region" {
   default     = "eu-west-2"
 }
 
-variable "availability_zone_a" {
-  type        = string
-  description = "availability zone"
-  default     = "eu-west-2a"
-}
-
-variable "availability_zone_b" {
-  type        = string
-  description = "availability zone"
-  default     = "eu-west-2b"
-}
-
 variable "ecs_cluster" {
   description = "ECS cluster name"
 }

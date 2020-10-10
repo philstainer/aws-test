@@ -11,7 +11,7 @@ resource "aws_vpc" "main" {
 resource "aws_subnet" "public_a" {
   vpc_id            = aws_vpc.main.id
   cidr_block        = "10.0.1.0/24"
-  availability_zone = var.availability_zone_a
+  availability_zone = "eu-west-2a"
 
   tags = {
     Name = "Public Subnet Availability Zone A"
@@ -21,10 +21,20 @@ resource "aws_subnet" "public_a" {
 resource "aws_subnet" "public_b" {
   vpc_id            = aws_vpc.main.id
   cidr_block        = "10.0.2.0/24"
-  availability_zone = var.availability_zone_b
+  availability_zone = "eu-west-2b"
 
   tags = {
     Name = "Public Subnet Availability Zone B"
+  }
+}
+
+resource "aws_subnet" "public_c" {
+  vpc_id            = aws_vpc.main.id
+  cidr_block        = "10.0.3.0/24"
+  availability_zone = "eu-west-2c"
+
+  tags = {
+    Name = "Public Subnet Availability Zone C"
   }
 }
 
@@ -63,5 +73,10 @@ resource "aws_route_table_association" "a" {
 
 resource "aws_route_table_association" "b" {
   subnet_id      = aws_subnet.public_b.id
+  route_table_id = aws_route_table.main.id
+}
+
+resource "aws_route_table_association" "c" {
+  subnet_id      = aws_subnet.public_c.id
   route_table_id = aws_route_table.main.id
 }

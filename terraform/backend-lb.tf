@@ -1,7 +1,12 @@
 resource "aws_alb" "ecs-load-balancer" {
-  name            = "ecs-load-balancer"
-  security_groups = [aws_security_group.allow_http.id]
-  subnets         = [aws_subnet.public_a.id, aws_subnet.public_b.id]
+  name               = "ecs-load-balancer"
+  load_balancer_type = "application"
+  subnets = [
+    aws_subnet.public_a.id,
+    aws_subnet.public_b.id,
+    aws_subnet.public_c.id
+  ]
+  security_groups = [aws_security_group.load_balancer_security_group.id]
 
   tags = {
     Name = "ecs-load-balancer"
@@ -37,7 +42,7 @@ resource "aws_alb_listener" "alb-listener" {
   protocol          = "HTTP"
 
   default_action {
-    target_group_arn = aws_alb_target_group.ecs-target-group.arn
     type             = "forward"
+    target_group_arn = aws_alb_target_group.ecs-target-group.arn
   }
 }
